@@ -74,10 +74,10 @@ def prioridadeValida(pri):
 # Valida a hora. Consideramos que o dia tem 24 horas, como no Brasil, ao invés
 # de dois blocos de 12 (AM e PM), como nos EUA.
 def horaValida(horaMin) :
-  if len(horaMin) != 4 or not soDigitos(horaMin):
+  if len(horaMin) != 5 or not soDigitos(horaMin[1:]) or horaMin[0] != '&':
     return False
   else:
-    if horaMin[0]+horaMin[1] > '23' or horaMin[2]+horaMin[3] > '59':
+    if (horaMin[1]+horaMin[2] > '23' or horaMin[1]+horaMin[2] < '00') or (horaMin[3]+horaMin[4] > '59' or horaMin[3]+horaMin[4] < '00'):
       return False
     return True
 
@@ -85,23 +85,23 @@ def horaValida(horaMin) :
 # colocar 31 dias em fevereiro. Não precisamos nos certificar, porém,
 # de que um ano é bissexto. 
 def dataValida(data) :
-  if len(data) != 8 or not soDigitos(data):
+  if len(data) != 9 or not soDigitos(data[1:]) or data[0] != '#':
     return False
   
   else:
-    if data[2]+data[3] > '12' or data[2]+data[3] < '01':
+    if data[3]+data[4] > '12' or data[3]+data[4] < '01':
       return False
     else:
-      if data[2]+data[3] == '01' or data[2]+data[3] == '03' or data[2]+data[3] == '05' or data[2]+data[3] == '07' or data[2]+data[3] == '08' or data[2]+data[3] == '10' or data[2]+data[3] == '12':
-        if data[0]+data[1] > '31' or data[0]+data[1] < '01':
+      if data[3]+data[4] == '01' or data[3]+data[4] == '03' or data[3]+data[4] == '05' or data[3]+data[4] == '07' or data[3]+data[4] == '08' or data[3]+data[4] == '10' or data[3]+data[4] == '12':
+        if data[1]+data[2] > '31' or data[1]+data[2] < '01':
           return False
       
-      elif data[2]+data[3] == '02':
-        if data[0]+data[1] > '29':
+      elif data[3]+data[4] == '02':
+        if data[1]+data[2] > '29':
           return False
 
-      elif data[2]+data[3] == '04' or data[2]+data[3] == '06' or data[2]+data[3] == '09' or data[2]+data[3] == '11':
-        if data[0]+data[1] > '30':
+      elif data[3]+data[4] == '04' or data[3]+data[4] == '06' or data[3]+data[4] == '09' or data[3]+data[4] == '11':
+        if data[1]+data[2] > '30':
           return False
   return True
 
