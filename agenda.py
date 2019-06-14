@@ -18,6 +18,9 @@ FAZER = 'f'
 PRIORIZAR = 'p'
 LISTAR = 'l'
 
+arquivo = open('todo.txt', 'r')
+linhas = arquivo.readlines()
+arquivo.close()
 # Imprime texto com cores. Por exemplo, para imprimir "Oi mundo!" em vermelho, basta usar
 #
 # printCores('Oi mundo!', RED)
@@ -74,10 +77,10 @@ def prioridadeValida(pri):
 # Valida a hora. Consideramos que o dia tem 24 horas, como no Brasil, ao invés
 # de dois blocos de 12 (AM e PM), como nos EUA.
 def horaValida(horaMin) :
-  if len(horaMin) != 5 or not soDigitos(horaMin[1:]) or horaMin[0] != '&':
+  if len(horaMin) != 4 or not soDigitos(horaMin):
     return False
   else:
-    if (horaMin[1]+horaMin[2] > '23' or horaMin[1]+horaMin[2] < '00') or (horaMin[3]+horaMin[4] > '59' or horaMin[3]+horaMin[4] < '00'):
+    if (horaMin[0]+horaMin[1] > '23' or horaMin[0]+horaMin[1] < '00') or (horaMin[2]+horaMin[3] > '59' or horaMin[2]+horaMin[3] < '00'):
       return False
     return True
 
@@ -85,30 +88,30 @@ def horaValida(horaMin) :
 # colocar 31 dias em fevereiro. Não precisamos nos certificar, porém,
 # de que um ano é bissexto. 
 def dataValida(data) :
-  if len(data) != 9 or not soDigitos(data[1:]) or data[0] != '#':
+  if len(data) != 8 or not soDigitos(data):
     return False
   
   else:
-    if data[3]+data[4] > '12' or data[3]+data[4] < '01':
+    if data[2]+data[3] > '12' or data[2]+data[3] < '01':
       return False
     else:
-      if data[3]+data[4] == '01' or data[3]+data[4] == '03' or data[3]+data[4] == '05' or data[3]+data[4] == '07' or data[3]+data[4] == '08' or data[3]+data[4] == '10' or data[3]+data[4] == '12':
-        if data[1]+data[2] > '31' or data[1]+data[2] < '01':
+      if data[2]+data[3] == '01' or data[2]+data[3] == '03' or data[2]+data[3] == '05' or data[2]+data[3] == '07' or data[2]+data[3] == '08' or data[2]+data[3] == '10' or data[2]+data[3] == '12':
+        if data[0]+data[1] > '31' or data[0]+data[1] < '01':
           return False
       
-      elif data[3]+data[4] == '02':
-        if data[1]+data[2] > '29':
+      elif data[2]+data[3] == '02':
+        if data[0]+data[1] > '29':
           return False
 
-      elif data[3]+data[4] == '04' or data[3]+data[4] == '06' or data[3]+data[4] == '09' or data[3]+data[4] == '11':
-        if data[1]+data[2] > '30':
+      elif data[2]+data[3] == '04' or data[2]+data[3] == '06' or data[2]+data[3] == '09' or data[2]+data[3] == '11':
+        if data[0]+data[1] > '30':
           return False
   return True
 
 # Valida que o string do projeto está no formato correto. 
 def projetoValido(proj):
 
-  if proj[0] == '+' and len(projeto) >= 2:
+  if proj[0] == '+' and len(proj) >= 2:
     return True
 
   return False
@@ -131,6 +134,9 @@ def soDigitos(numero) :
       return False
   return True
 
+# Função que, dada um caractere inicial, vai continuar concatenando
+# até encontrar um espaço vazio
+
 
 # Dadas as linhas de texto obtidas a partir do arquivo texto todo.txt, devolve
 # uma lista de tuplas contendo os pedaços de cada linha, conforme o seguinte
@@ -141,25 +147,48 @@ def soDigitos(numero) :
 # É importante lembrar que linhas do arquivo todo.txt devem estar organizadas de acordo com o
 # seguinte formato:
 #
-# DDMMAAAA HHMM (P) DESC @CONTEXT +PROJ
+# #DDMMAAAA &HHMM (P) DESC @CONTEXT +PROJ
 #
 # Todos os itens menos DESC são opcionais. Se qualquer um deles estiver fora do formato, por exemplo,
 # data que não tem todos os componentes ou prioridade com mais de um caractere (além dos parênteses),
 # tudo que vier depois será considerado parte da descrição.  
 def organizar(linhas):
+  
   itens = []
 
-  for l in linhas:
-    data = '' 
+  for l in linhas:    
+    data = ''  
     hora = ''
     pri = ''
     desc = ''
     contexto = ''
     projeto = ''
-  
+    
     l = l.strip() # remove espaços em branco e quebras de linha do começo e do fim
     tokens = l.split() # quebra o string em palavras
+    
+    cont = 0
 
+    while cont < len(tokens):
+      if dataValida(tokens[cont]):
+        data += tokens[cont]
+        
+      elif prioridadeValida(tokens[cont]):
+        pri += tokens[cont]
+
+      elif horaValida(tokens[cont]):
+        hora += tokens[cont]
+
+      elif contextoValido(tokens[cont]):
+        contexto += tokens[cont]
+
+      elif projetoValido(tokens[cont]):
+        projeto += tokens[cont]
+
+      else:
+        desc += tokens[cont] + ' '
+
+      cont += 1
     # Processa os tokens um a um, verificando se são as partes da atividade.
     # Por exemplo, se o primeiro token é uma data válida, deve ser guardado
     # na variável data e posteriormente removido a lista de tokens. Feito isso,
