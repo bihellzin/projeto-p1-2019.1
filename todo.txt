@@ -1,5 +1,5 @@
 Comer menos açúcar
-23052017 1030 Reunião com Huguinho, Luizinho e Zezinho. @Skype +Pesquisa
+23052017 1030 (A) Reunião com Huguinho, Luizinho e Zezinho. @Skype +Pesquisa
 (B) Terminar a especificação do projeto de IF968. +IF968
 (B) Publicar a especificação do projeto de IF968 terminada. +IF968
 (A) Corrigir provas de IF968 +IF968
@@ -29,4 +29,4 @@ Correr na orla
 12042017 1700 Prova de P1
 12042017 Estudar pra prova de P1 com os monitores @UFPE
 24062019 Cortar o cabelo
-24062019 1500 Pegar o carro no conserto
+24062019 1500 (A) Pegar o carro no conserto

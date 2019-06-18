@@ -7,10 +7,10 @@ RED   = "\033[1;31m"
 BLUE  = "\033[1;34m"
 CYAN  = "\033[1;36m"
 GREEN = "\033[0;32m"
+YELLOW = "\033[0;33m"
 RESET = "\033[0;0m"
 BOLD    = "\033[;1m"
 REVERSE = "\033[;7m"
-YELLOW = "\033[0;33m"
 
 ADICIONAR = 'a'
 REMOVER = 'r'
@@ -67,11 +67,11 @@ def adicionar(descricao, extras):
 
   # Escreve no TODO_FILE. 
   try: 
-    fp = open('todo.txt', 'a')
+    fp = open(TODO_FILE, 'a')
     fp.write(novaAtividade + "\n")
     fp.close()
   except IOError as err:
-    print("Não foi possível escrever para o arquivo " + 'todo.txt')
+    print("Não foi possível escrever para o arquivo " + TODO_FILE)
     print(err)
     return False
 
@@ -173,6 +173,8 @@ def organizar(linhas):
 
   itens = []
 
+  cont = 1
+
   for l in linhas:    
     data = ''  
     hora = ''
@@ -217,7 +219,8 @@ def organizar(linhas):
 
       desc = ' '.join(tokens)
 
-    itens.append((desc, (data, hora, pri, contexto, projeto)))
+    itens.append((desc, (data, hora, pri, contexto, projeto), cont))
+    cont += 1
     
   return itens
 
@@ -230,13 +233,58 @@ def organizar(linhas):
 # é uma das tarefas básicas do projeto, porém. 
 def listar():
 
-  arquivo = open('todo.txt', 'r')
+  arquivo = open(TODO_FILE, 'r')
   linhas = arquivo.readlines()
   arquivo.close()
 
   todasAtividades = organizar(linhas)
 
   return todasAtividades
+
+def listarOrdenado():
+  
+  itens = ordenarPorPrioridade(ordenarPorDataHora(listar()))
+  
+  for i in itens:
+    atividadePrintada = ''
+
+    if i[1][0] != '':
+      atividadePrintada += i[1][0][0:2] + '/' + i[1][0][2:4] + '/' + i[1][0][4:] + ' '
+
+    if i[1][1] != '':
+      atividadePrintada += i[1][1][0:2] + 'h' + i[1][1][2:4] + 'm '
+
+    if i[1][2] != '':
+      atividadePrintada += i[1][2] + ' '
+
+    atividadePrintada += i[0] + ' '
+
+    if i[1][3] != '':
+      atividadePrintada += i[1][3] + ' '
+
+    if i[1][4] != '':
+      atividadePrintada += i[1][4]
+
+    if i[1][2] == '(A)':
+      print(RED + str(i[2]),end = ' ')
+      printCores(atividadePrintada, RED)
+
+    elif i[1][2] == '(B)':
+      print(YELLOW+str(i[2]),end = ' ')
+      printCores(atividadePrintada, YELLOW)
+
+    elif i[1][2] == '(C)':
+      print(GREEN+str(i[2]),end = ' ')
+      printCores(atividadePrintada, GREEN)
+
+    elif i[1][2] == '(D)':
+      print(CYAN + str(i[2]), end = ' ')
+      printCores(atividadePrintada, CYAN)
+      
+    else:
+      print(i[2], atividadePrintada)
+
+  return itens
 
 def ordenarPorDataHora(itens):
   
@@ -289,8 +337,26 @@ def transformaData(elemento):
    
 def ordenarPorPrioridade(itens):
 
-  ################ COMPLETAR
+  itens = ordenarPorDataHora(itens)
+  aux = len(itens)
+  cont = 0
+  
+  while cont < aux:
+    for i in range(aux-1):
+      
+      if itens[i][1][2] != '' and itens[i+1][1][2] != '':
+        if itens[i][1][2] > itens[i+1][1][2]:
+          temp = itens[i]
+          itens[i] = itens[i+1]
+          itens[i+1] = temp
 
+      elif itens[i][1][2] == '' and itens[i+1][1][2] != '':
+        temp = itens[i]
+        itens[i] = itens[i+1]
+        itens[i+1] = temp
+          
+    cont += 1
+  
   return itens
 
 def fazer(num):
@@ -322,13 +388,14 @@ def priorizar(num, prioridade):
 # O bloco principal fica responsável também por tirar espaços em branco no início e fim dos strings
 # usando o método strip(). Além disso, realiza a validação de horas, datas, prioridades, contextos e
 # projetos. 
-def processarComandos(comandos) :
+'''def processarComandos(comandos) :
   if comandos[1] == ADICIONAR:
     comandos.pop(0) # remove 'agenda.py'
     comandos.pop(0) # remove 'adicionar'
     itemParaAdicionar = organizar([' '.join(comandos)])[0]
     # itemParaAdicionar = (descricao, (prioridade, data, hora, contexto, projeto))
     adicionar(itemParaAdicionar[0], itemParaAdicionar[1]) # novos itens não têm prioridade
+
   elif comandos[1] == LISTAR:
     atividades = listar()
     
@@ -362,4 +429,4 @@ def processarComandos(comandos) :
 # sys.argv terá como conteúdo
 #
 # ['agenda.py', 'a', 'Mudar', 'de', 'nome']
-processarComandos(sys.argv)
+processarComandos(sys.argv)'''
