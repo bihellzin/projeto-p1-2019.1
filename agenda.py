@@ -18,9 +18,6 @@ FAZER = 'f'
 PRIORIZAR = 'p'
 LISTAR = 'l'
 
-arquivo = open('todo.txt', 'r')
-linhas = arquivo.readlines()
-arquivo.close()
 # Imprime texto com cores. Por exemplo, para imprimir "Oi mundo!" em vermelho, basta usar
 #
 # printCores('Oi mundo!', RED)
@@ -47,18 +44,34 @@ def adicionar(descricao, extras):
   # não é possível adicionar uma atividade que não possui descrição. 
   if descricao  == '' :
     return False
-  
 
-  ################ COMPLETAR
+  else:
+    novaAtividade = ''
 
+    if dataValida(extras[0]):
+        novaAtividade += extras[0] + ' '
+
+    if horaValida(extras[1]):
+      novaAtividade += extras[1] + ' '
+      
+    if prioridadeValida(extras[2]):
+      novaAtividade += extras[2] + ' '
+
+    novaAtividade += descricao + ' '
+
+    if contextoValido(extras[3]):
+      novaAtividade += extras[3] + ' '
+
+    if projetoValido(extras[4]):
+      novaAtividade += extras[4]
 
   # Escreve no TODO_FILE. 
   try: 
-    fp = open(TODO_FILE, 'a')
+    fp = open('todo.txt', 'a')
     fp.write(novaAtividade + "\n")
     fp.close()
   except IOError as err:
-    print("Não foi possível escrever para o arquivo " + TODO_FILE)
+    print("Não foi possível escrever para o arquivo " + 'todo.txt')
     print(err)
     return False
 
@@ -110,16 +123,20 @@ def dataValida(data) :
 
 # Valida que o string do projeto está no formato correto. 
 def projetoValido(proj):
-
-  if proj[0] == '+' and len(proj) >= 2:
+  if proj == '':
+    return False
+  
+  elif proj[0] == '+' and len(proj) >= 2:
     return True
 
   return False
 
 # Valida que o string do contexto está no formato correto. 
 def contextoValido(cont):
+  if cont == '':
+    return False
 
-  if cont[0] == '@' and len(cont) >= 2:
+  elif cont[0] == '@' and len(cont) >= 2:
     return True
 
   return False
@@ -153,7 +170,7 @@ def soDigitos(numero) :
 # data que não tem todos os componentes ou prioridade com mais de um caractere (além dos parênteses),
 # tudo que vier depois será considerado parte da descrição.  
 def organizar(linhas):
-  
+
   itens = []
 
   for l in linhas:    
@@ -166,29 +183,7 @@ def organizar(linhas):
     
     l = l.strip() # remove espaços em branco e quebras de linha do começo e do fim
     tokens = l.split() # quebra o string em palavras
-    
-    cont = 0
-
-    while cont < len(tokens):
-      if dataValida(tokens[cont]):
-        data += tokens[cont]
         
-      elif prioridadeValida(tokens[cont]):
-        pri += tokens[cont]
-
-      elif horaValida(tokens[cont]):
-        hora += tokens[cont]
-
-      elif contextoValido(tokens[cont]):
-        contexto += tokens[cont]
-
-      elif projetoValido(tokens[cont]):
-        projeto += tokens[cont]
-
-      else:
-        desc += tokens[cont] + ' '
-
-      cont += 1
     # Processa os tokens um a um, verificando se são as partes da atividade.
     # Por exemplo, se o primeiro token é uma data válida, deve ser guardado
     # na variável data e posteriormente removido a lista de tokens. Feito isso,
@@ -197,13 +192,34 @@ def organizar(linhas):
     # para saber se são contexto e/ou projeto. Quando isso terminar, o que sobrar
     # corresponde à descrição. É só transformar a lista de tokens em um string e
     # construir a tupla com as informações disponíveis. 
+    if tokens == []:
+      continue
+    else:
+      if dataValida(tokens[0]):
+        data += tokens[0]
+        tokens.pop(0)
 
-    ################ COMPLETAR
+      if horaValida(tokens[0]):
+        hora += tokens[0]
+        tokens.pop(0)
+      
+      if prioridadeValida(tokens[0]):
+        pri += tokens[0]
+        tokens.pop(0)
+
+      if contextoValido(tokens[len(tokens)-2]):
+        contexto += tokens[len(tokens)-2]
+        tokens.pop(len(tokens)-2)
+
+      if projetoValido(tokens[len(tokens)-1]):
+        projeto += tokens[len(tokens)-1]
+        tokens.pop(len(tokens)-1)
+
+      desc = ' '.join(tokens)
 
     itens.append((desc, (data, hora, pri, contexto, projeto)))
-
+    
   return itens
-
 
 # Datas e horas são armazenadas nos formatos DDMMAAAA e HHMM, mas são exibidas
 # como se espera (com os separadores apropridados). 
@@ -214,14 +230,62 @@ def organizar(linhas):
 # é uma das tarefas básicas do projeto, porém. 
 def listar():
 
-  ################ COMPLETAR
-  return 
+  arquivo = open('todo.txt', 'r')
+  linhas = arquivo.readlines()
+  arquivo.close()
+
+  todasAtividades = organizar(linhas)
+
+  return todasAtividades
 
 def ordenarPorDataHora(itens):
+  
+  itens = ordenaPorData(itens)
+  cont = 0
+  aux = len(itens)
+  while cont < aux:
+    for i in range(aux-1):
+      
+      if itens[i][1][0] == itens[i+1][1][0]:
+        if itens[i][1][1] == '' and itens[i+1][1][1] != '':
+          temp = itens[i]
+          itens[i] = itens[i+1]
+          itens[i+1] = temp
 
-  ################ COMPLETAR
+        elif itens[i][1][1] != '' and itens[i+1][1][1] != '' and itens[i][1][1] > itens[i+1][1][1]:
+          temp = itens[i]
+          itens[i] = itens[i+1]
+          itens[i+1] = temp
+          
+    cont += 1
 
   return itens
+
+def ordenaPorData(itens):
+  aux = len(itens)  
+  cont = 0
+  
+  while cont < len(itens):
+    for i in range(len(itens)-1):
+      if itens[i][1][0][4:] + itens[i][1][0][2:4] + itens[i][1][0][0:2] > itens[i+1][1][0][4:] + itens[i+1][1][0][2:4] + itens[i+1][1][0][0:2]:
+        temp = itens[i]
+        itens[i] = itens[i+1]
+        itens[i+1] = temp
+    cont += 1
+    
+  for i in range(aux-1):
+    if itens[i][1][0] == '':
+      ultimo = itens.pop(0)
+      itens.append(ultimo)
+
+  return itens
+
+def transformaData(elemento):
+
+  data = elemento[1][0]
+  data = data[4:] + data[2:4] + data[0:2]
+
+  return data
    
 def ordenarPorPrioridade(itens):
 
@@ -266,8 +330,9 @@ def processarComandos(comandos) :
     # itemParaAdicionar = (descricao, (prioridade, data, hora, contexto, projeto))
     adicionar(itemParaAdicionar[0], itemParaAdicionar[1]) # novos itens não têm prioridade
   elif comandos[1] == LISTAR:
-    return    
-    ################ COMPLETAR
+    atividades = listar()
+    
+    return atividades
 
   elif comandos[1] == REMOVER:
     return    
