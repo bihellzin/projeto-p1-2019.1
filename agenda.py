@@ -43,6 +43,7 @@ def adicionar(descricao, extras):
 
   # não é possível adicionar uma atividade que não possui descrição. 
   if descricao  == '' :
+    print('Esse compromisso não possui descrição, por isso não foi adicionado na sua agenda')
     return False
 
   else:
