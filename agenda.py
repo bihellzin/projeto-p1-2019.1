@@ -53,17 +53,14 @@ def adicionar(descricao, extras):
 
     if horaValida(extras[1]):
       novaAtividade += extras[1] + ' '
-      
-    if prioridadeValida(extras[2]):
-      novaAtividade += extras[2] + ' '
 
     novaAtividade += descricao + ' '
 
-    if contextoValido(extras[3]):
-      novaAtividade += extras[3] + ' '
+    if contextoValido(extras[2]):
+      novaAtividade += extras[2] + ' '
 
-    if projetoValido(extras[4]):
-      novaAtividade += extras[4]
+    if projetoValido(extras[3]):
+      novaAtividade += extras[3]
 
   # Escreve no TODO_FILE. 
   try: 
@@ -361,25 +358,142 @@ def ordenarPorPrioridade(itens):
 
 def fazer(num):
 
-  ################ COMPLETAR
+  atividades = listar()
 
-  return 
+  if num > len(atividades) or num < 1:
+    print('Tá trollando o esquema querendo tirar coisa que não existe né carai')
+  
+  else:
+    feito = atividades.pop(num-1)
 
-def remover():
+    arquivo = open(TODO_FILE, 'w')
 
-  ################ COMPLETAR
+    for i in atividades:
+      linha = ''
 
-  return
+      if i[1][0] != '':
+        linha += i[1][0] + ' '
+      
+      if i[1][1] != '':
+        linha += i[1][1] + ' '
+      
+      if i[1][2] != '':
+        linha += i[1][2] + ' '
+      
+      linha += i[0] + ' '
+
+      if i[1][3] != '':
+        linha += i[1][3] + ' '
+      
+      if i[1][4] != '':
+        linha += i[1][4]
+      
+      arquivo.write(linha + '\n')
+
+    arquivo.close()
+
+    arquivo = open('done.txt','a')
+
+    linha = ''
+
+    if feito[1][0] != '':
+      linha += feito[1][0] + ' '
+    
+    if feito[1][1] != '':
+      linha += feito[1][1] + ' '
+    
+    if feito[1][2] != '':
+      linha += feito[1][2] + ' '
+    
+    linha += feito[0] + ' '
+
+    if feito[1][3] != '':
+      linha += feito[1][3] + ' '
+    
+    if feito[1][4] != '':
+      linha += feito[1][4]
+
+    arquivo.write(linha + '\n')
+    arquivo.close()
+
+
+def remover(num):
+
+  atividades = listar()
+  if num > len(atividades) or num < 1:
+    print('Tá trollando o esquema querendo tirar coisa que não existe né carai')
+  
+  else:
+    atividades.pop(num-1)
+
+    arquivo = open(TODO_FILE, 'w')
+
+    for i in atividades:
+      linha = ''
+
+      if i[1][0] != '':
+        linha += i[1][0] + ' '
+      
+      if i[1][1] != '':
+        linha += i[1][1] + ' '
+      
+      if i[1][2] != '':
+        linha += i[1][2] + ' '
+      
+      linha += i[0] + ' '
+
+      if i[1][3] != '':
+        linha += i[1][3] + ' '
+      
+      if i[1][4] != '':
+        linha += i[1][4]
+      
+      arquivo.write(linha + '\n')
+      
+    arquivo.close()
 
 # prioridade é uma letra entre A a Z, onde A é a mais alta e Z a mais baixa.
 # num é o número da atividade cuja prioridade se planeja modificar, conforme
 # exibido pelo comando 'l'. 
 def priorizar(num, prioridade):
 
-  ################ COMPLETAR
+  atividades = listar()
 
-  return 
+  if 'A' <= prioridade <= 'Z' or 'a' <= prioridade <= 'z':
+    prioridade = prioridade.upper()
+    mudança = atividades.pop(num-1)
 
+    mudança = (mudança[0],(mudança[1][0],mudança[1][1],'(%s)'%prioridade,mudança[1][3],mudança[1][4]),mudança[2])
+    atividades.insert(num-1, mudança)
+
+    arquivo = open(TODO_FILE, 'w')
+
+    for i in atividades:
+      linha = ''
+
+      if i[1][0] != '':
+        linha += i[1][0] + ' '
+      
+      if i[1][1] != '':
+        linha += i[1][1] + ' '
+      
+      if i[1][2] != '':
+        linha += i[1][2] + ' '
+      
+      linha += i[0] + ' '
+
+      if i[1][3] != '':
+        linha += i[1][3] + ' '
+      
+      if i[1][4] != '':
+        linha += i[1][4]
+      
+      arquivo.write(linha + '\n')
+    
+    arquivo.close()
+  
+  else:
+    print('Tá trollando o esquema querendo tirar coisa que não existe né carai')
 
 
 # Esta função processa os comandos e informações passados através da linha de comando e identifica
@@ -388,7 +502,7 @@ def priorizar(num, prioridade):
 # O bloco principal fica responsável também por tirar espaços em branco no início e fim dos strings
 # usando o método strip(). Além disso, realiza a validação de horas, datas, prioridades, contextos e
 # projetos. 
-'''def processarComandos(comandos) :
+def processarComandos(comandos) :
   if comandos[1] == ADICIONAR:
     comandos.pop(0) # remove 'agenda.py'
     comandos.pop(0) # remove 'adicionar'
@@ -397,24 +511,21 @@ def priorizar(num, prioridade):
     adicionar(itemParaAdicionar[0], itemParaAdicionar[1]) # novos itens não têm prioridade
 
   elif comandos[1] == LISTAR:
-    atividades = listar()
+    atividades = listarOrdenado()
     
     return atividades
 
   elif comandos[1] == REMOVER:
-    return    
-
-    ################ COMPLETAR    
-
+    comandos[2] = int(comandos[2])
+    remover(comandos[2]-1)
+      
   elif comandos[1] == FAZER:
-    return    
-
-    ################ COMPLETAR
+    comandos[2] = int(comandos[2])
+    fazer(comandos[2])
 
   elif comandos[1] == PRIORIZAR:
-    return    
-
-    ################ COMPLETAR
+    comandos[2] = int(comandos[2])
+    priorizar(comandos[2], comandos[3])
 
   else :
     print("Comando inválido.")
@@ -429,4 +540,4 @@ def priorizar(num, prioridade):
 # sys.argv terá como conteúdo
 #
 # ['agenda.py', 'a', 'Mudar', 'de', 'nome']
-processarComandos(sys.argv)'''
+processarComandos(sys.argv)

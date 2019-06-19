@@ -1,3 +1,4 @@
+(A) Comer menos açúcar 
 23052017 1030 (A) Reunião com Huguinho, Luizinho e Zezinho. @Skype +Pesquisa
 (B) Terminar a especificação do projeto de IF968. +IF968
 (B) Publicar a especificação do projeto de IF968 terminada. +IF968
@@ -10,21 +11,22 @@
 (B) Revisar artigos SBES Insightful Ideas +Service
 (B) Revisar artigos SBLP +Service
 (D) Read "Optimizing energy consumption of GUIs in android apps: A multi-objective approach." 
+Jogar bola na praia 
 25062019 1900 (B) Ir na pizzaria @Skillus 
 Correr na orla 
 23052017 1445 Tomar antibiótico. 
 25062019 1830 Sair de casa 
 23052017 0930 Aula de discreta 
-2300 (C) Escovar os dentes @Casa 
+2300 Escovar os dentes @Casa 
 2245 Ir para o quarto @Casa 
 2200 Ler notícias @Casa 
 2100 Jantar @Casa 
 2000 Ir para casa 
 2330 Deitar 
+23052017 1230 Almoçar com Bill Gates. @Microsoft +Service
 23052017 1845 Cheirar uma carreira de cocaina 
-22052017 (C) Prova de ADO 
-12042017 1700 (G) Prova de P1 
+22052017 Prova de ADO 
+12042017 1700 Prova de P1 
 12042017 Estudar pra prova de P1 com os monitores @UFPE 
 24062019 Cortar o cabelo 
 24062019 1500 (A) Pegar o carro no conserto 
-22052017 0900 (A) Café da manhã de 20 anos de casado. 
