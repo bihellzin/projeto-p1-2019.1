@@ -425,7 +425,7 @@ def remover(num):
     print('Tá trollando o esquema querendo tirar coisa que não existe né carai')
   
   else:
-    atividades.pop(num-1)
+    atividades.pop(num)
 
     arquivo = open(TODO_FILE, 'w')
 
@@ -460,7 +460,10 @@ def priorizar(num, prioridade):
 
   atividades = listar()
 
-  if 'A' <= prioridade <= 'Z' or 'a' <= prioridade <= 'z':
+  if num > len(atividades):
+    print('Número não correspondente a uma atividade')
+
+  elif 'A' <= prioridade <= 'Z' or 'a' <= prioridade <= 'z':
     prioridade = prioridade.upper()
     mudança = atividades.pop(num-1)
 
@@ -503,33 +506,78 @@ def priorizar(num, prioridade):
 # O bloco principal fica responsável também por tirar espaços em branco no início e fim dos strings
 # usando o método strip(). Além disso, realiza a validação de horas, datas, prioridades, contextos e
 # projetos. 
+
 def processarComandos(comandos) :
-  if comandos[1] == ADICIONAR:
-    comandos.pop(0) # remove 'agenda.py'
-    comandos.pop(0) # remove 'adicionar'
-    itemParaAdicionar = organizar([' '.join(comandos)])[0]
-    # itemParaAdicionar = (descricao, (prioridade, data, hora, contexto, projeto))
-    adicionar(itemParaAdicionar[0], itemParaAdicionar[1]) # novos itens não têm prioridade
+  if len(comandos) <= 2 and comandos[1] != 'l':
+    print('Não foi possível realizar a operação, pois você não passou os parâmetros necessários')
+  
+  else:
+    if comandos[1] == ADICIONAR:
+      comandos.pop(0) # remove 'agenda.py'
+      comandos.pop(0) # remove 'adicionar'
 
-  elif comandos[1] == LISTAR:
-    atividades = listarOrdenado()
-    
-    return atividades
+      data = comandos[0]
 
-  elif comandos[1] == REMOVER:
-    comandos[2] = int(comandos[2])
-    remover(comandos[2]-1)
+      if dataValida(data):
+        comandos.pop(0)
+        hora = comandos[0]
+
+        if horaValida(hora):
+          comandos.pop(0)
+
+        else:
+          hora = ''
       
-  elif comandos[1] == FAZER:
-    comandos[2] = int(comandos[2])
-    fazer(comandos[2])
+      else:
+        data = ''
+        hora = comandos[1]
 
-  elif comandos[1] == PRIORIZAR:
-    comandos[2] = int(comandos[2])
-    priorizar(comandos[2], comandos[3])
+        if horaValida(hora):
+          comandos.pop(1)
 
-  else :
-    print("Comando inválido.")
+        else:
+          hora = '' 
+
+      contexto = comandos[len(comandos)-2]
+
+      if contextoValido(contexto):
+        comandos.pop(len(comandos)-2)
+      
+      else:
+        contexto = ''
+
+      projeto = comandos[len(comandos)-1]
+
+      if projetoValido(projeto):
+        comandos.pop(len(comandos)-1)
+
+      else:
+        projeto = ''
+
+      descricao = ' '.join(comandos)
+      
+      itemParaAdicionar = (descricao, (data, hora, contexto, projeto))
+      adicionar(itemParaAdicionar[0], itemParaAdicionar[1]) # novos itens não têm prioridade
+
+    elif comandos[1] == LISTAR:
+      atividades = listarOrdenado()
+      
+      return atividades
+
+    elif comandos[1] == REMOVER:
+      comandos[2] = int(comandos[2])
+      remover(comandos[2]-1)
+        
+    elif comandos[1] == FAZER:
+      comandos[2] = int(comandos[2])
+      fazer(comandos[2])
+
+    elif comandos[1] == PRIORIZAR:
+      comandos[2] = int(comandos[2])
+      priorizar(comandos[2], comandos[3])
+
+    else :
+      print("Comando inválido.")
     
   
 # sys.argv é uma lista de strings onde o primeiro elemento é o nome do programa
