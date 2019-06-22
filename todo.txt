@@ -12,22 +12,16 @@
 (D) Read "Optimizing energy consumption of GUIs in android apps: A multi-objective approach." 
 25062019 1900 (B) Ir na pizzaria @Skillus 
 Correr na orla 
-23052017 1445 Tomar antibiótico. 
 25062019 1830 Sair de casa 
-23052017 0930 Aula de discreta 
 2300 (C) Escovar os dentes @Casa 
 2245 Ir para o quarto @Casa 
 2100 Jantar @Casa 
 2000 Ir para casa 
 2330 Deitar 
-23052017 1845 Cheirar uma carreira de cocaina 
 22052017 (C) Prova de ADO 
 12042017 1700 (G) Prova de P1 
 12042017 (G) Estudar pra prova de P1 com os monitores @UFPE 
-24062019 Cortar o cabelo 
 24062019 1500 (A) Pegar o carro no conserto 
 2200 DAR UM MORTAL PRA TRÁS 
 (A) DAR MORTAL PRA FRENTE 
-19062019 1935 (A) Dar o cu 
-Tinha 1000 reais na minha carteira 
 0800 @Casa Sacar 1000 reais no Banco 
