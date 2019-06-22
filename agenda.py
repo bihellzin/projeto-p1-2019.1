@@ -265,35 +265,35 @@ def listarOrdenado():
 
     if i[1][2] == '(A)':
       if len(str(i[2])) < 2:
-        print(RED + str(i[2]),end = '  ')
+        print(' ' + RED + str(i[2]),end = ' ')
       else: 
         print(RED + str(i[2]),end = ' ')
       printCores(atividadePrintada, RED)
 
     elif i[1][2] == '(B)':
       if len(str(i[2])) < 2:
-        print(YELLOW+str(i[2]),end = '  ')
+        print(' ' + YELLOW + str(i[2]),end = ' ')
       else:
         print(YELLOW+str(i[2]),end = ' ')
       printCores(atividadePrintada, YELLOW)
 
     elif i[1][2] == '(C)':
       if len(str(i[2])) < 2:
-        print(GREEN+str(i[2]),end = '  ')
+        print(' ' + GREEN + str(i[2]),end = ' ')
       else:
         print(GREEN+str(i[2]),end = ' ')
       printCores(atividadePrintada, GREEN)
 
     elif i[1][2] == '(D)':
       if len(str(i[2])) < 2:
-        print(CYAN+str(i[2]),end = '  ')
+        print(' ' + CYAN + str(i[2]),end = ' ')
       else:
         print(CYAN + str(i[2]), end = ' ')
       printCores(atividadePrintada, CYAN)
       
     else:
       if len(str(i[2])) < 2:
-        print(i[2], end = '  ')
+        print(' ' + str(i[2]), end = ' ')
       else:
         print(i[2], end = ' ')
       print(atividadePrintada)
